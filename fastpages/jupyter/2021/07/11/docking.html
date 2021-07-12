@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Tutorial de acoplamiento molecular (básico) | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Tutorial de acoplamiento molecular (básico)" />
+<meta name="author" content="Jeremy Howard & Hamel Husain" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://aljusa.github.io/lowhaningmolecules/fastpages/jupyter/2021/07/11/docking.html" />
+<meta property="og:url" content="https://aljusa.github.io/lowhaningmolecules/fastpages/jupyter/2021/07/11/docking.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://aljusa.github.io/lowhaningmolecules/images/diagram.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-07-11T00:00:00-05:00" />
+<script type="application/ld+json">
+{"url":"https://aljusa.github.io/lowhaningmolecules/fastpages/jupyter/2021/07/11/docking.html","@type":"BlogPosting","headline":"Tutorial de acoplamiento molecular (básico)","dateModified":"2021-07-11T00:00:00-05:00","datePublished":"2021-07-11T00:00:00-05:00","image":"https://aljusa.github.io/lowhaningmolecules/images/diagram.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://aljusa.github.io/lowhaningmolecules/fastpages/jupyter/2021/07/11/docking.html"},"author":{"@type":"Person","name":"Jeremy Howard & Hamel Husain"},"description":"An easy to use blogging platform with support for Jupyter Notebooks.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/lowhaningmolecules/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://aljusa.github.io/lowhaningmolecules/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/lowhaningmolecules/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/lowhaningmolecules/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/lowhaningmolecules/about/">About Me</a><a class="page-link" href="/lowhaningmolecules/search/">Search</a><a class="page-link" href="/lowhaningmolecules/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Tutorial de acoplamiento molecular (básico)</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-07-11T00:00:00-05:00" itemprop="datePublished">
+        Jul 11, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Jeremy Howard & Hamel Husain</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/lowhaningmolecules/categories/#fastpages">fastpages</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/lowhaningmolecules/categories/#jupyter">jupyter</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/aljusa/lowhaningmolecules/tree/master/_notebooks/2021-07-11-docking.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/lowhaningmolecules/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/aljusa/lowhaningmolecules/master?filepath=_notebooks%2F2021-07-11-docking.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/lowhaningmolecules/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/aljusa/lowhaningmolecules/blob/master/_notebooks/2021-07-11-docking.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/lowhaningmolecules/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Introducción-al-acoplamiento">Introducción al acoplamiento </a></li>
+<li class="toc-entry toc-h2"><a href="#Descripción-del-tutorial">Descripción del tutorial </a></li>
+<li class="toc-entry toc-h2"><a href="#Tutorial">Tutorial </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#1.-Configuración-del-entorno-de-trabajo">1. Configuración del entorno de trabajo </a></li>
+<li class="toc-entry toc-h3"><a href="#Preparación-de-estructuras">Preparación de estructuras </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Preparación-del-receptor">Preparación del receptor </a></li>
+<li class="toc-entry toc-h4"><a href="#Preparación-del-ligando">Preparación del ligando </a></li>
+<li class="toc-entry toc-h4"><a href="#Selección-del-sitio-de-unión">Selección del sitio de unión </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Acoplamiento-Molecular-con-gnina">Acoplamiento Molecular con gnina </a></li>
+<li class="toc-entry toc-h3"><a href="#Análisis-de-resultados">Análisis de resultados </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-07-11-docking.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introducción-al-acoplamiento">
+<a class="anchor" href="#Introducci%C3%B3n-al-acoplamiento" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introducción al acoplamiento<a class="anchor-link" href="#Introducci%C3%B3n-al-acoplamiento"> </a>
+</h2>
+<p>El acoplamiento molecular es un método computacional para la predicción de la unión entre dos moléculas.</p>
+<p>Esta moléculas son conocidas como <font color="red">Receptor</font> y <font color="blue">Ligando</font>.</p>
+<p>Generalmente el <font color="red">Receptor</font> es una proteína y el <font color="blue">Ligando</font> una <strong>molecula pequeña</strong>, o sea una estructura con un peso molecular menor a 700 Da.</p>
+<p>Aquí es necesario detenernos un poco y hacer algunas aclaraciones.</p>
+<ul>
+<li>El <strong>receptor</strong> tambien puede ser DNA o RNA, pero los programas para hacer este tipo de acoplamiento no se van a considerar en este tutorial.</li>
+<li>El <strong>ligando</strong> tambien puede una proteína, pero el acoplamiento proteína-proteína no se va a  considerar en este tutorial.</li>
+<li>El <strong>ligando</strong> puede tener un peso molecular mayor a 700 Da. En realidad, muchas de las consideraciones en este tutorial son solo sugerencias. Si sabes lo que estas haciendo, adelante, si no, <strong>¡hazlo con cuidado!</strong>.</li>
+</ul>
+<p>El uso del acoplamiento molecular proteína-molécula pequeña tiene diversas aplicaciones, pero antes de entrar a detalle, veamos cuales son los objetivos de este tipo de acoplamiento.</p>
+<ol>
+<li>Predecir la conformación energéticamente más favorable del ligando durante la unión a la superficie del receptor.</li>
+<li>Estimar la afinidad de la unión receptor-ligando</li>
+<li>Clasificar entre ligandos activos e inactivos</li>
+</ol>
+<p>Dentro de las aplicaciones donde se considera util, el acoplamiento molecular, estan:</p>
+<ul>
+<li>El cribado virtual</li>
+<li>El modelado de farmacóforos</li>
+<li>Estudios QSAR</li>
+<li>Estudios pre-Dinámica molecular</li>
+<li>Otro que no recuerdo en este momento</li>
+</ul>
+<p>Que no sabes que son estas aplicaciones, no te preocupes. En futuros tutoriales, abordaremos estos temas a detalle.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Descripción-del-tutorial">
+<a class="anchor" href="#Descripci%C3%B3n-del-tutorial" aria-hidden="true"><span class="octicon octicon-link"></span></a>Descripción del tutorial<a class="anchor-link" href="#Descripci%C3%B3n-del-tutorial"> </a>
+</h2>
+<p>En este tutorial se realizará un ejemplo de acoplamiento muy sencillo. El caso más simple que se me puede ocurrir, es replicar la unión de un complejo receptor-ligando conocido.</p>
+<p>El complejo que utilizaremos la proteína PTP1B unida al ligando BB3. Disponible en <a href="https://www.rcsb.org/structure/1T48">https://www.rcsb.org/structure/1T48</a>.</p>
+<p>Antes de comenzar a trabajar debemos saber que vamos a hacer. Siempre es bueno tener un diagrama de nuestros planes. <strong>¡Evita la improvisación!</strong>.</p>
+<p>En el siguiente imagen se muestran los pasos generales que se realizan antes, durante y despues del acoplamiento molecular.</p>
+<ol>
+<li>Configuración del entorno de trabajo</li>
+<li>Preparación de estructuras<ul>
+<li>Preparación del receptor</li>
+<li>Selección del sitio de unión</li>
+<li>Preparación del ligando</li>
+</ul>
+</li>
+<li>Acoplamiento molecular</li>
+<li>Análisis visual de conformaciones</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/aljusa/lowhaningmolecules/master/images/docking_diagram.svg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Tutorial">
+<a class="anchor" href="#Tutorial" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial<a class="anchor-link" href="#Tutorial"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="1.-Configuración-del-entorno-de-trabajo">
+<a class="anchor" href="#1.-Configuraci%C3%B3n-del-entorno-de-trabajo" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Configuración del entorno de trabajo<a class="anchor-link" href="#1.-Configuraci%C3%B3n-del-entorno-de-trabajo"> </a>
+</h3>
+<p>Antes de comenzar este tutorial, ponte comodo, 
+En esta sección vamos a instalar los paquetes que vamos a utilizar en todas las demás secciones.</p>
+<ul>
+<li>Miniconda (<a href="https://docs.conda.io/en/latest/miniconda.html">https://docs.conda.io/en/latest/miniconda.html</a>)<ul>
+<li>Sistema de gestión de paquetes que nos facilita la instalación de todo lo demas.</li>
+</ul>
+</li>
+<li>Open Babel (<a href="http://openbabel.org/wiki/Main_Page">http://openbabel.org/wiki/Main_Page</a>)<ul>
+<li>Caja de herramientas para el manejo de datos químicos</li>
+</ul>
+</li>
+<li>Pybel (<a href="https://openbabel.org/docs/dev/UseTheLibrary/Python_Pybel.html">https://openbabel.org/docs/dev/UseTheLibrary/Python_Pybel.html</a>)<ul>
+<li>API de Open Babel para Python</li>
+</ul>
+</li>
+<li>PDB2PQR (<a href="https://pdb2pqr.readthedocs.io/en/latest/index.html">https://pdb2pqr.readthedocs.io/en/latest/index.html</a>)<ul>
+<li>Este programa automatiza muchas de las tareas comunes de preparar estructuras.</li>
+</ul>
+</li>
+<li>gnina (<a href="https://github.com/gnina/gnina">https://github.com/gnina/gnina</a>)<ul>
+<li>Programa para realizar el acoplamiento molecular</li>
+</ul>
+</li>
+<li>py3Dmol (<a href="https://pypi.org/project/py3Dmol/">https://pypi.org/project/py3Dmol/</a>)<ul>
+<li>API de 3Dmol.js (<a href="https://3dmol.csb.pitt.edu/">https://3dmol.csb.pitt.edu/</a>) para Python</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="c1">#Miniconda</span>
+<span class="err">!</span><span class="n">wget</span> <span class="o">-</span><span class="n">c</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">continuum</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">miniconda</span><span class="o">/</span><span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+<span class="err">!</span><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span>
+<span class="err">!</span><span class="n">bash</span> <span class="o">./</span><span class="n">Miniconda3</span><span class="o">-</span><span class="n">latest</span><span class="o">-</span><span class="n">Linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">sh</span> <span class="o">-</span><span class="n">b</span> <span class="o">-</span><span class="n">f</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
+<span class="err">!</span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">q</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.7</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'/usr/local/lib/python3.7/site-packages/'</span><span class="p">)</span>
+
+<span class="c1">#openbabel</span>
+<span class="err">!</span><span class="n">apt</span> <span class="n">install</span> <span class="n">openbabel</span>
+<span class="err">!</span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">openbabel</span>
+<span class="kn">from</span> <span class="nn">openbabel</span> <span class="kn">import</span> <span class="n">pybel</span>
+
+<span class="c1">#pdb2pqr</span>
+<span class="err">!</span><span class="n">apt</span> <span class="n">install</span> <span class="n">pdb2pqr</span>
+
+<span class="c1">#gnina</span>
+<span class="err">!</span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">gnina</span><span class="o">/</span><span class="n">gnina</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v1</span><span class="o">.</span><span class="mf">0.1</span><span class="o">/</span><span class="n">gnina</span>
+<span class="err">!</span><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">gnina</span>
+
+<span class="c1">#py3dmol</span>
+<span class="err">!</span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">q</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">py3dmol</span>
+<span class="kn">import</span> <span class="nn">py3Dmol</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Preparación-de-estructuras">
+<a class="anchor" href="#Preparaci%C3%B3n-de-estructuras" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preparación de estructuras<a class="anchor-link" href="#Preparaci%C3%B3n-de-estructuras"> </a>
+</h3>
+<p>Antes del acoplamiento vamos a visualizar nuestro primer complejo PDB (PDB es el formato del archivo que describe la estructura de las proteinas, asi como mp3 es para audio y jpeg para fotografías, pdb es para proteínas).</p>
+<p>Los pasos para la visualización son:</p>
+<ol>
+<li>Descargar la estructura PDB</li>
+<li>Visualizarla con py3Dmol</li>
+</ol>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="c1">#Descargar complejo</span>
+<span class="err">!</span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">files</span><span class="o">.</span><span class="n">rcsb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">view</span><span class="o">/</span><span class="mi">1</span><span class="n">T48</span><span class="o">.</span><span class="n">pdb</span>
+
+<span class="c1">#Visualizar complejo</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+<span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'1T48.pdb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'cartoon'</span><span class="p">:{},</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'radius'</span><span class="p">:</span><span class="o">.</span><span class="mi">1</span><span class="p">}})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>En esta primer visualización veremos la estructura PDB como una sola entidad. Sin embargo al visitar el sitio web de <a href="https://www.rcsb.org/structure/1I91">https://www.rcsb.org/structure/1I91</a> nos daremos cuenta que esta estructura contiene una macromolécula y tres moléculas pequeñas. Por lo que a continuación vamos a extraer las moléculas que nos interesan. La proteína y el ligando INQ.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">grep</span> <span class="n">ATOM</span> <span class="mi">1</span><span class="n">T48</span><span class="o">.</span><span class="n">pdb</span> <span class="o">&gt;</span> <span class="n">receptor</span><span class="o">.</span><span class="n">pdb</span>
+
+<span class="c1"># Extraer átomos del ligando</span>
+<span class="err">!</span><span class="n">grep</span> <span class="n">BB3</span> <span class="mi">1</span><span class="n">T48</span><span class="o">.</span><span class="n">pdb</span> <span class="o">&gt;</span> <span class="n">ligando</span><span class="o">.</span><span class="n">pdb</span>
+
+<span class="c1">#Visualizar </span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+<span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'receptor.pdb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'cartoon'</span><span class="p">:{},</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'radius'</span><span class="p">:</span><span class="o">.</span><span class="mi">1</span><span class="p">}})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'ligando.pdb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">1</span><span class="p">},{</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'colorscheme'</span><span class="p">:</span><span class="s1">'greenCarbon'</span><span class="p">}})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Este ultimo modelo tridimensional seria el resultado que nosostros vamos a intentar replicar mediante el acoplamiento molecular.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Preparación-del-receptor">
+<a class="anchor" href="#Preparaci%C3%B3n-del-receptor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preparación del receptor<a class="anchor-link" href="#Preparaci%C3%B3n-del-receptor"> </a>
+</h4>
+<p>En la sección anterior dividimos el archivo PDB para separar el receptor y el ligando.</p>
+<p>Si analizamos la estructura del receptor  obtenida de PDB veremos que está incompleta. <strong>¡No contiene átomos de hidrogeno!</strong>.</p>
+<p>Veamos la comparación.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">obabel</span> <span class="n">receptor</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">O</span> <span class="n">receptor</span><span class="o">.</span><span class="n">mol2</span>
+<span class="c1">#Visualizar </span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+<span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'receptor.mol2'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'cartoon'</span><span class="p">:{},</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'radius'</span><span class="p">:</span><span class="o">.</span><span class="mi">1</span><span class="p">}})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Además de la falta de hidrógenos otras estructuras PDB pueden estar incompletas por la falta de residuos, o tienen un mismo residuo en dos posiciones a la vez. Por lo que, antes de realizar el acoplamiento necesario resolver todos estos problemas.</p>
+<p>Para agregar hidrógenos de manera adecuada debemos conocer el estado de protonación de la estructura.</p>
+<p>Por otro lado, para el acoplamiento también en necesario conocer las cargas de cada átomo.</p>
+<p>Esto podría parecer algo complicado de hacer, pero lo haremos con uso comando, utilizando el programa pdb2pqr.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">pdb2pqr</span> <span class="o">--</span><span class="n">ff</span><span class="o">=</span><span class="n">amber</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">ph</span><span class="o">=</span><span class="mf">7.4</span> <span class="n">receptor</span><span class="o">.</span><span class="n">pdb</span> <span class="n">receptor_prep</span><span class="o">.</span><span class="n">pqr</span>
+<span class="err">!</span><span class="n">obabel</span> <span class="n">receptor_prep</span><span class="o">.</span><span class="n">pqr</span> <span class="o">-</span><span class="n">O</span> <span class="n">receptor_prep</span><span class="o">.</span><span class="n">pdb</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Si visualizamos la nueva estructura veremos que los hidrogenos han sido agregados.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">obabel</span> <span class="n">receptor_prep</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">O</span> <span class="n">receptor_H</span><span class="o">.</span><span class="n">mol2</span>
+
+<span class="c1">#Visualizar </span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+<span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'receptor_H.mol2'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'cartoon'</span><span class="p">:{},</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'radius'</span><span class="p">:</span><span class="o">.</span><span class="mi">1</span><span class="p">}})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="n">v</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Preparación-del-ligando">
+<a class="anchor" href="#Preparaci%C3%B3n-del-ligando" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preparación del ligando<a class="anchor-link" href="#Preparaci%C3%B3n-del-ligando"> </a>
+</h4>
+<p>Al igual que el receptor, podemos extraer la estructura del ligando del archivo del complejo PDB. No obstante, hacerlo de esta manera genera un sesgo relacionado con la preparación del ligando.</p>
+<p>Lo ideal para validar nuestro protocolo de acoplamiento es utilizar ligandos no cristalizados. Debemos obtener la estructura del ligando de otra fuente.</p>
+<p>Existen distintas bases de datos donde podemos buscar el ligando o incluso podemos dibujarlo en algún programa.</p>
+<p>La estrategia que vamos a utilizar en este tutorial será construir la estructura desde su código SMILES.</p>
+<p>El código SMILES es una cadena de caracteres cuyo ordenamiento define de que manera estan enlazados los atomos en una estructura.</p>
+<p>Durante la construcción de la estructura del ligando vamos a generar una estructura tridimensional minimizada, agregar hidrogenos, definir el orden de enlace y asignar cargas.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">obabel</span> <span class="o">-</span><span class="p">:</span><span class="s2">"CCc1c(c2ccc(cc2o1)S(=O)(=O)N(C)C)C(=O)c3cc(c(c(c3)Br)O)Br"</span> <span class="o">-</span><span class="n">O</span> <span class="n">ligando_prep</span><span class="o">.</span><span class="n">mol2</span> <span class="o">--</span><span class="n">gen3d</span> <span class="o">--</span><span class="n">minimize</span> <span class="o">--</span><span class="n">ff</span> <span class="n">GAFF</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Selección-del-sitio-de-unión">
+<a class="anchor" href="#Selecci%C3%B3n-del-sitio-de-uni%C3%B3n" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selección del sitio de unión<a class="anchor-link" href="#Selecci%C3%B3n-del-sitio-de-uni%C3%B3n"> </a>
+</h4>
+<p>Para este tutorial utilizaremos la opción --autobox_ligand de gnina para seleccionar como sitio de unión las coordenadas del ligando en el PDB.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Acoplamiento-Molecular-con-gnina">
+<a class="anchor" href="#Acoplamiento-Molecular-con-gnina" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acoplamiento Molecular con gnina<a class="anchor-link" href="#Acoplamiento-Molecular-con-gnina"> </a>
+</h3>
+<p>Exiten muchos programas para realizar acoplamiento, cada uno con sus ventajas y desventajas, pero no estraremos a detalle en ese tema. Simplementa bastará decir que uno de los programas más populares de la ultima decada es Autodock vina, fácil de utilizar, rapido y con buen nivel de predicción. En actualidad existen varias versiones de vina desarrolladas por distintos grupos de investigación, la versión que utilizaremos en este tutorial se llama gnina. Usaremos esta versión ya que es más facil de utilizar que vina y en general tiene una mayor precisión (cita).</p>
+<p>Una vez que hemos preparado las estructuras el acoplamiento con gnina es sumamente sencillo basta con indicar las siguients opciones</p>
+<ul>
+<li>-r receptor_preparado</li>
+<li>-l ligando_preparado</li>
+<li>--autobox_ligand ligando_original</li>
+<li>-o archivo_salida</li>
+<li>--cnn_scoring (indicar <em>none</em> cuando no se este utilizando GPU)</li>
+</ul>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="o">./</span><span class="n">gnina</span> <span class="o">-</span><span class="n">r</span> <span class="n">receptor_prep</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">l</span> <span class="n">ligando_prep</span><span class="o">.</span><span class="n">mol2</span> <span class="o">--</span><span class="n">autobox_ligand</span> <span class="n">ligando</span><span class="o">.</span><span class="n">pdb</span> <span class="o">-</span><span class="n">o</span> <span class="n">ligando_out</span><span class="o">.</span><span class="n">sdf</span> <span class="o">--</span><span class="n">cnn_scoring</span> <span class="n">none</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Análisis-de-resultados">
+<a class="anchor" href="#An%C3%A1lisis-de-resultados" aria-hidden="true"><span class="octicon octicon-link"></span></a>Análisis de resultados<a class="anchor-link" href="#An%C3%A1lisis-de-resultados"> </a>
+</h3>
+<p>Despues de realizar el acoplamiento gnina muestra 9 conformaciones diferentes. A cada conformación se le asigna un puntaje de acoplamiento (affinity). Este puntaje es una estimación de la energía libre de unión, por lo que entre más negativo sea, es mejor.</p>
+<p>Además de la energía libre de unión podemos comparar las conformaciones mediante el calculo de RMSD.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">obrms</span> <span class="o">--</span><span class="n">firstonly</span> <span class="n">ligando</span><span class="o">.</span><span class="n">pdb</span> <span class="n">ligando_out</span><span class="o">.</span><span class="n">sdf</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>El valor de RMSD indica que tan parecida es una conformación con otra, en este caso comparamos las 9 conformaciones del acoplamiento con la conformación del crista. Entre más cercano es el valor de RMSD, más parecidas son las conformaciones.
+El ultimo analisis que realizaremos sera la inspección visual de las conformaciones</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">interact</span><span class="p">,</span><span class="n">fixed</span><span class="p">,</span><span class="n">IntSlider</span>
+<span class="kn">import</span> <span class="nn">ipywidgets</span>
+
+<span class="k">def</span> <span class="nf">MolTo3DView</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+  <span class="n">v</span> <span class="o">=</span> <span class="n">py3Dmol</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'receptor.pdb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'cartoon'</span><span class="p">:{},</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'radius'</span><span class="p">:</span><span class="o">.</span><span class="mi">1</span><span class="p">}})</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'ligando.pdb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">1</span><span class="p">},{</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'colorscheme'</span><span class="p">:</span><span class="s1">'darkCarbon'</span><span class="p">}})</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">addModel</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'ligando_out.sdf'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">setStyle</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">2</span><span class="p">},{</span><span class="s1">'stick'</span><span class="p">:{</span><span class="s1">'colorscheme'</span><span class="p">:</span><span class="s1">'greenCarbon'</span><span class="p">}})</span>
+  <span class="n">v</span><span class="o">.</span><span class="n">zoomTo</span><span class="p">({</span><span class="s1">'model'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+  <span class="k">return</span> <span class="n">v</span>
+
+<span class="k">def</span> <span class="nf">conf_viewer</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">confs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">MolTo3DView</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">confs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">pybel</span><span class="o">.</span><span class="n">readfile</span><span class="p">(</span><span class="s1">'sdf'</span><span class="p">,</span> <span class="s1">'ligando_out.sdf'</span><span class="p">)]</span>
+<span class="n">interact</span><span class="p">(</span><span class="n">conf_viewer</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="nb">max</span><span class="o">=</span><span class="mi">9</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="aljusa/lowhaningmolecules"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/lowhaningmolecules/fastpages/jupyter/2021/07/11/docking.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/lowhaningmolecules/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/lowhaningmolecules/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/lowhaningmolecules/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/lowhaningmolecules/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/lowhaningmolecules/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
